@@ -15,7 +15,7 @@ package main
 
 import (
 	ecr "github.com/awslabs/amazon-ecr-credential-helper/ecr-login"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api"
+	"ssm-login/api"
 	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/config"
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
@@ -24,5 +24,5 @@ import (
 func main() {
 	defer log.Flush()
 	config.SetupLogger()
-	credentials.Serve(ecr.ECRHelper{ClientFactory: api.DefaultClientFactory{}})
+	credentials.Serve(ecr.SSMHelper{ClientFactory: api.DefaultClientFactory{}})
 }

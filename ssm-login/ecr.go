@@ -16,39 +16,32 @@ package ecr
 import (
 	"errors"
 	"fmt"
-
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api"
+	"ssm-login/api"
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
 )
 
 var notImplemented = errors.New("not implemented")
 
-type ECRHelper struct {
+type SSMHelper struct {
 	ClientFactory api.ClientFactory
 }
 
-// ensure ECRHelper adheres to the credentials.Helper interface
-var _ credentials.Helper = (*ECRHelper)(nil)
+// ensure SSMHelper adheres to the credentials.Helper interface
+var _ credentials.Helper = (*SSMHelper)(nil)
 
-func (ECRHelper) Add(creds *credentials.Credentials) error {
+func (SSMHelper) Add(creds *credentials.Credentials) error {
 	// This does not seem to get called
 	return notImplemented
 }
 
-func (ECRHelper) Delete(serverURL string) error {
+func (SSMHelper) Delete(serverURL string) error {
 	// This does not seem to get called
 	return notImplemented
 }
 
-func (self ECRHelper) Get(serverURL string) (string, string, error) {
+func (self SSMHelper) Get(serverURL string) (string, string, error) {
 	defer log.Flush()
-
-	registry, err := api.ExtractRegistry(serverURL)
-	if err != nil {
-		log.Errorf("Error parsing the serverURL: %v", err)
-		return "", "", credentials.NewErrCredentialsNotFound()
-	}
 
 	client := self.ClientFactory.NewClientFromRegion(registry.Region)
 	auth, err := client.GetCredentials(serverURL)
@@ -59,7 +52,7 @@ func (self ECRHelper) Get(serverURL string) (string, string, error) {
 	return auth.Username, auth.Password, nil
 }
 
-func (self ECRHelper) List() (map[string]string, error) {
+func (self SSMHelper) List() (map[string]string, error) {
 	log.Debug("Listing credentials")
 	client := self.ClientFactory.NewClientWithDefaults()
 
@@ -70,11 +63,51 @@ func (self ECRHelper) List() (map[string]string, error) {
 	}
 
 	result := map[string]string{}
-	
+
 	for _, auth := range auths {
 	        serverURL := auth.ProxyEndpoint
 	        result[serverURL] = auth.Username
 	}
 	return result, nil
+}
+
+
+______
+
+package main
+
+import (
+	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ssm"
+)
+
+type UserCredentials struct {
+	username string
+	password string
+}
+func getCredentials(name, credType string) string {
+	svc := ssm.New(session.New())
+	prams := &ssm.GetParameterInput{
+		Name:   aws.String(name+credType),
+		WithDecryption: aws.Bool(true),
+	}
+	resp, err := svc.GetParameter(prams)
+	if err != nil {
+		panic(err)
+	}
+
+	return *resp.Parameter.Value
+}
+
+func main() {
+	// Create the service's client with the session.
+	var url string = "gofactory-docker-godev.jfrog.io"
+	var u string = getCredentials(url,"-usr")
+	var p string = getCredentials(url,"-pwd")
+	creds := UserCredentials{u, p}
+	fmt.Printf("Found creds for:\n")
+	fmt.Println(creds.username)
 }
 
