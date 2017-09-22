@@ -14,12 +14,6 @@
 package api
 
 import (
-	"encoding/base64"
-	"fmt"
-	"regexp"
-	"strings"
-	"time"
-
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
@@ -40,17 +34,17 @@ type Auth struct {
 func GetCredentials(serverURL string) (*Auth, error) {
 	svc := ssm.New(session.New())
 	pramsUser := &ssm.GetParameterInput{
-		Name:   aws.String(serverUrl+"-usr"),
+		Name:   aws.String(serverURL+"-usr"),
 		WithDecryption: aws.Bool(true),
 	}
 	pramsPass := &ssm.GetParameterInput{
-		Name:   aws.String(serverUrl+"-pwd"),
+		Name:   aws.String(serverURL+"-pwd"),
 		WithDecryption: aws.Bool(true),
 	}
 	respUser, errUser := svc.GetParameter(pramsUser)
 	respPass, errPass := svc.GetParameter(pramsPass)
 	if errUser != nil || errPass != nil {
-		return nil, errUser+errPass
+		return nil, string(errUser)+string(errPass)
 	}
 
 	log.Debugf("Retrieving credentials for (%s)", serverURL)
