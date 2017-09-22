@@ -17,6 +17,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
+	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cache"
 	log "github.com/cihub/seelog"
 )
 
@@ -28,6 +30,11 @@ type Client interface {
 type Auth struct {
 	Username      string
 	Password      string
+}
+
+type defaultClient struct {
+	ecrClient       ssmiface.SSMAPI
+	credentialCache cache.CredentialsCache
 }
 
 // GetCredentials returns username, password, and proxyEndpoint
