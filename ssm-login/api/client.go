@@ -50,7 +50,7 @@ func GetCredentials(serverURL string) (*Auth, error) {
 	log.Debugf("Retrieving credentials for (%s)", serverURL)
 
 	return &Auth{
-		Username:      respUser.Parameter.Value,
-		Password:      respPass.Parameter.Value,
+		Username:      *respUser.Parameter.Value,
+		Password:      *respPass.Parameter.Value,
 	}, nil
 }
