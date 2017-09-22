@@ -14,10 +14,10 @@
 package api
 
 import (
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ssm"
-	log "github.com/cihub/seelog"
+	"https://github.com/aws/aws-sdk-go/aws"
+	"https://github.com/aws/aws-sdk-go/aws/session"
+	"https://github.com/aws/aws-sdk-go/service/ssm"
+	log "https://github.com/cihub/seelog"
 )
 
 type Client interface {
