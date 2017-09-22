@@ -17,7 +17,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	log "https://github.com/cihub/seelog"
+	log "github.com/cihub/seelog"
 )
 
 type Client interface {
