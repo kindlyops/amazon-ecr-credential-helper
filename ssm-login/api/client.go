@@ -32,7 +32,8 @@ type Auth struct {
 
 // GetCredentials returns username, password, and proxyEndpoint
 func GetCredentials(serverURL string) (*Auth, error) {
-	svc := ssm.New(session.New())
+        sess := session.Must(session.NewSession())
+	svc := ssm.New(sess)
 	pramsUser := &ssm.GetParameterInput{
 		Name:   aws.String(serverURL+"-usr"),
 		WithDecryption: aws.Bool(true),
