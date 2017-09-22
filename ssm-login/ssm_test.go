@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -11,15 +12,15 @@
 // express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package ecr
+package ssm
 
 import (
 	"errors"
 	"fmt"
 	"testing"
 
-	ecr "github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/mocks"
+	ssm "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/mocks"
 	"github.com/docker/docker-credential-helpers/credentials"
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/assert"
@@ -78,7 +79,7 @@ func TestGetError(t *testing.T) {
 func TestGetNoMatch(t *testing.T) {
 	helper := &ECRHelper{}
 
-	username, password, err := helper.Get("not-ecr-server-url")
+	username, password, err := helper.Get("not-ssm-server-url")
 	assert.True(t, credentials.IsErrCredentialsNotFound(err))
 	assert.Empty(t, username)
 	assert.Empty(t, password)

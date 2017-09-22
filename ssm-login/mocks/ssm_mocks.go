@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -19,8 +20,8 @@ package mock_api
 import (
 	aws "github.com/aws/aws-sdk-go/aws"
 	session "github.com/aws/aws-sdk-go/aws/session"
-	api "github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api"
 	gomock "github.com/golang/mock/gomock"
+	api "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
 )
 
 // Mock of ClientFactory interface

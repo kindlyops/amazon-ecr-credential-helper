@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2017 Kindly Ops LLC.
 # Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
@@ -28,4 +29,4 @@ export TARGET_GOOS="$1"
 export TARGET_GOARCH="$2"
 
 ./scripts/build_binary.sh "./bin/${TARGET_GOOS}-${TARGET_GOARCH}"
-echo "Built ecr-login for ${TARGET_GOOS}-${TARGET_GOARCH}"
+echo "Built ssm-login for ${TARGET_GOOS}-${TARGET_GOARCH}"

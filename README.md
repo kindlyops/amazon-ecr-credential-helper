@@ -1,11 +1,12 @@
-# Amazon ECR Docker Credential Helper
+# Amazon SSM Docker Credential Helper
 
-[![Build Status](https://travis-ci.org/awslabs/amazon-ecr-credential-helper.svg?branch=master)](https://travis-ci.org/awslabs/amazon-ecr-credential-helper)
+[![Build Status](https://travis-ci.org/kindlyops/amazon-ssm-credential-helper.svg?branch=master)](https://travis-ci.org/kindlyops/amazon-ssm-credential-helper)
 
-The Amazon ECR Docker Credential Helper is a
+The Amazon SSM Docker Credential Helper is a
 [credential helper](https://github.com/docker/docker-credential-helpers)
 for the Docker daemon that makes it easier to use
-[Amazon EC2 Container Registry](https://aws.amazon.com/ecr/).
+[AWS EC2 Systems Manager Parameter Store](http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html) to share
+credentials for 3rd party private Docker registries such as JFrog Artifactory or Quay.io.
 
 ## Prerequisites
 
@@ -18,24 +19,24 @@ You also must have AWS credentials available in one of the standard locations:
 * An [IAM role for Amazon EC2](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/iam-roles-for-amazon-ec2.html)
 * If you are working with an assumed role please set the environment variable: `AWS_SDK_LOAD_CONFIG=true` also.
 
-The Amazon ECR Docker Credential Helper uses the same credentials as the AWS
+The Amazon SSM Docker Credential Helper uses the same credentials as the AWS
 CLI and the AWS SDKs. For more information about configuring AWS credentials,
 see
 [Configuration and Credential Files](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html#cli-config-files)
 in the *AWS Command Line Interface User Guide*.
 
 The credentials must have a policy applied that
-[allows access to Amazon ECR](http://docs.aws.amazon.com/AmazonECR/latest/userguide/ecr_managed_policies.html).
+[allows access to Amazon SSM](http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-access.html).
 
 ## Installing
 
-To build and install the Amazon ECR Docker Credential Helper, we suggest golang 
+To build and install the Amazon SSM Docker Credential Helper, we suggest golang 
 1.6+ and `git` and `make` installed on your system.
 
 You can install this via `go get` with:
 
 ```
-go get -u github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cli/docker-credential-ecr-login
+go get -u github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cli/docker-credential-ssm-login
 ```
 
 
@@ -45,12 +46,12 @@ container and output it to local directory.
 
 With `TARGET_GOOS` environment variable, you can also cross compile the binary.
 
-Place the `docker-credential-ecr-login` binary on your `PATH` and set the contents 
+Place the `docker-credential-ssm-login` binary on your `PATH` and set the contents 
 of your `~/.docker/config.json` file to be:
 
 ```json
 {
-	"credsStore": "ecr-login"
+	"credsStore": "ssm-login"
 }
 ```
 
@@ -65,7 +66,7 @@ ECR registry:
 ```json
 {
 	"credHelpers": {
-		"aws_account_id.dkr.ecr.region.amazonaws.com": "ecr-login"
+		"your-private-registry.jfrog.io": "ssm-login"
 	}
 }
 ```
@@ -75,9 +76,9 @@ authentication credentials.
 
 ## Usage
 
-`docker pull 123457689012.dkr.ecr.us-west-2.amazonaws.com/my-repository:my-tag`
+`docker pull your-private-registry.jfrog.io/my-repository:my-tag`
 
-`docker push 123457689012.dkr.ecr.us-west-2.amazonaws.com/my-repository:my-tag`
+`docker push your-private-registry.jfrog.io/my-repository:my-tag`
 
 There is no need to use `docker login` or `docker logout`.
 
@@ -93,12 +94,13 @@ pull your images with `docker pull <your image>`, before running
 
 ## Troubleshooting
 
-Logs from the Amazon ECR Docker Credential Helper are stored in `~/.ecr/log`.
+Logs from the Amazon SSM Docker Credential Helper are stored in `~/.ssm/log`.
 
-For more information about Amazon ECR, see the the
-[Amazon EC2 Container Registry User Guide](http://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html).
+For more information about Amazon SSM, see the
+[Amazon Systems Manager Parameter Store](http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-paramstore.html)
+ documentation.
 
 ## License
 
-The Amazon ECR Docker Credential Helper is licensed under the Apache 2.0
+The Amazon SSM Docker Credential Helper is licensed under the Apache 2.0
 License.

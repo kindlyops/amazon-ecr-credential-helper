@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -16,8 +17,8 @@ package config
 import "os"
 
 func GetCacheDir() string {
-	if cacheDir := os.Getenv("AWS_ECR_CACHE_DIR"); cacheDir != "" {
+	if cacheDir := os.Getenv("AWS_SSM_CACHE_DIR"); cacheDir != "" {
 		return cacheDir
 	}
-	return "~/.ecr"
+	return "~/.ssm"
 }

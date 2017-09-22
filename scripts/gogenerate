@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2017 Kindly Ops LLC.
 # Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -20,4 +21,4 @@ cd "${ROOT}"
 
 source ./scripts/shared_env
 
-go generate -x $(go list ./ecr-login/... | grep -v '/vendor/')
+go generate -x $(go list ./ssm-login/... | grep -v '/vendor/')

@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -21,10 +22,9 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/ecr"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api/mocks"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cache"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cache/mocks"
 	"github.com/golang/mock/gomock"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api/mocks"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -389,7 +389,7 @@ func TestListCredentialsBadBase64AuthToken(t *testing.T) {
 	credentialCache := mock_cache.NewMockCredentialsCache(ctrl)
 
 	client := &defaultClient{
-		ecrClient: ecrClient,
+		ecrClient:       ecrClient,
 		credentialCache: credentialCache,
 	}
 
@@ -399,7 +399,7 @@ func TestListCredentialsBadBase64AuthToken(t *testing.T) {
 	emptyCache := []*cache.AuthEntry{}
 	credentialCache.EXPECT().List().Return(emptyCache)
 
-        ecrClient.EXPECT().GetAuthorizationToken(gomock.Any()).Do(
+	ecrClient.EXPECT().GetAuthorizationToken(gomock.Any()).Do(
 		func(input *ecr.GetAuthorizationTokenInput) {
 			if input == nil {
 				t.Fatal("Called with nil input")
@@ -411,7 +411,7 @@ func TestListCredentialsBadBase64AuthToken(t *testing.T) {
 		AuthorizationData: []*ecr.AuthorizationData{
 			&ecr.AuthorizationData{
 				ProxyEndpoint:      aws.String(testProxyEndpoint),
-				ExpiresAt:	    aws.Time(expiresAt),
+				ExpiresAt:          aws.Time(expiresAt),
 				AuthorizationToken: aws.String("invalid:token"),
 			},
 		},
@@ -430,7 +430,7 @@ func TestListCredentialsInvalidAuthToken(t *testing.T) {
 	credentialCache := mock_cache.NewMockCredentialsCache(ctrl)
 
 	client := &defaultClient{
-		ecrClient: ecrClient,
+		ecrClient:       ecrClient,
 		credentialCache: credentialCache,
 	}
 
@@ -440,7 +440,7 @@ func TestListCredentialsInvalidAuthToken(t *testing.T) {
 	emptyCache := []*cache.AuthEntry{}
 	credentialCache.EXPECT().List().Return(emptyCache)
 
-        ecrClient.EXPECT().GetAuthorizationToken(gomock.Any()).Do(
+	ecrClient.EXPECT().GetAuthorizationToken(gomock.Any()).Do(
 		func(input *ecr.GetAuthorizationTokenInput) {
 			if input == nil {
 				t.Fatal("Called with nil input")
@@ -452,7 +452,7 @@ func TestListCredentialsInvalidAuthToken(t *testing.T) {
 		AuthorizationData: []*ecr.AuthorizationData{
 			&ecr.AuthorizationData{
 				ProxyEndpoint:      aws.String(testProxyEndpoint),
-				ExpiresAt:	    aws.Time(expiresAt),
+				ExpiresAt:          aws.Time(expiresAt),
 				AuthorizationToken: aws.String("invalidtoken"),
 			},
 		},

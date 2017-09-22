@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/awslabs/amazon-ecr-credential-helper/ecr-login",
+	"ImportPath": "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login",
 	"GoVersion": "go1.6",
 	"GodepVersion": "v79",
 	"Packages": [

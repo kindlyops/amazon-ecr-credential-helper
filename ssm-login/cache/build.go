@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2017 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -21,19 +22,19 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/config"
 	log "github.com/cihub/seelog"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/config"
 	homedir "github.com/mitchellh/go-homedir"
 )
 
 func BuildCredentialsCache(awsSession *session.Session, region string, cacheDir string) CredentialsCache {
-	if os.Getenv("AWS_ECR_DISABLE_CACHE") != "" {
-		log.Debug("Cache disabled due to AWS_ECR_DISABLE_CACHE")
+	if os.Getenv("AWS_SSM_DISABLE_CACHE") != "" {
+		log.Debug("Cache disabled due to AWS_SSM_DISABLE_CACHE")
 		return NewNullCredentialsCache()
 	}
 
 	if cacheDir == "" {
-		//Get cacheDir from env var "AWS_ECR_CACHE_DIR" or set to default
+		//Get cacheDir from env var "AWS_SSM_CACHE_DIR" or set to default
 		cacheDir = config.GetCacheDir()
 	}
 

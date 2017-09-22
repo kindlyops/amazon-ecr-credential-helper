@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -18,8 +19,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cache"
 	log "github.com/cihub/seelog"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
 )
 
 type Client interface {
@@ -28,8 +29,8 @@ type Client interface {
 }
 
 type Auth struct {
-	Username      string
-	Password      string
+	Username string
+	Password string
 }
 
 type defaultClient struct {
@@ -39,14 +40,14 @@ type defaultClient struct {
 
 // GetCredentials returns username, password, and proxyEndpoint
 func GetCredentials(serverURL string) (*Auth, error) {
-        sess := session.Must(session.NewSession())
+	sess := session.Must(session.NewSession())
 	svc := ssm.New(sess)
 	pramsUser := &ssm.GetParameterInput{
-		Name:   aws.String(serverURL+"-usr"),
+		Name:           aws.String(serverURL + "-usr"),
 		WithDecryption: aws.Bool(true),
 	}
 	pramsPass := &ssm.GetParameterInput{
-		Name:   aws.String(serverURL+"-pwd"),
+		Name:           aws.String(serverURL + "-pwd"),
 		WithDecryption: aws.Bool(true),
 	}
 	respUser, errUser := svc.GetParameter(pramsUser)
@@ -58,7 +59,7 @@ func GetCredentials(serverURL string) (*Auth, error) {
 	log.Debugf("Retrieving credentials for (%s)", serverURL)
 
 	return &Auth{
-		Username:      *respUser.Parameter.Value,
-		Password:      *respPass.Parameter.Value,
+		Username: *respUser.Parameter.Value,
+		Password: *respPass.Parameter.Value,
 	}, nil
 }

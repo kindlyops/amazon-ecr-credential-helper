@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -14,15 +15,15 @@
 package main
 
 import (
-	ecr "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login"
-	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
-	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/config"
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
+	ssm "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/config"
 )
 
 func main() {
 	defer log.Flush()
 	config.SetupLogger()
-	credentials.Serve(ecr.SSMHelper{ClientFactory: api.DefaultClientFactory{}})
+	credentials.Serve(ssm.SSMHelper{ClientFactory: api.DefaultClientFactory{}})
 }

@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -35,10 +36,10 @@ func SetupLoggerWithConfig(config string) {
 }
 
 func loggerConfig() string {
-	logfile, err := homedir.Expand(GetCacheDir() + "/log/ecr-login.log")
+	logfile, err := homedir.Expand(GetCacheDir() + "/log/ssm-login.log")
 	if err != nil {
 		fmt.Errorf("%v", err)
-		logfile = "/tmp/.ecr/log/ecr-login.log"
+		logfile = "/tmp/.ecr/log/ssm-login.log"
 	}
 	// Clean the path to replace with OS-specific separators
 	logfile = filepath.Clean(logfile)

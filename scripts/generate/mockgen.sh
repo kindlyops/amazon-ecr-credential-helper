@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2017 Kindly Ops LLC.
 # Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the
@@ -19,13 +20,13 @@ set -e
 package=${1?Must provide package}
 interfaces=${2?Must provide interface names}
 outputfile=${3?Must provide an output file}
-PROJECT_VENDOR="github.com/awslabs/amazon-ecr-credential-helper/ecr-login/vendor/"
+PROJECT_VENDOR="github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/vendor/"
 
 export PATH="${GOPATH//://bin:}/bin:$PATH"
 
 data=$(
 cat << EOF
-// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2017 Kindly Ops LLC.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
 // not use this file except in compliance with the License. A copy of the

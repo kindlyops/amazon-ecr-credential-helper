@@ -1,3 +1,4 @@
+# Copyright 2017 Kindly Ops LLC.
 # Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
@@ -13,7 +14,7 @@
 
 FROM golang:1.9
 
-WORKDIR /go/src/github.com/awslabs/amazon-ecr-credential-helper
+WORKDIR /go/src/github.com/kindlyops/amazon-ssm-credential-helper
 
 COPY . .
 

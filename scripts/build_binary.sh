@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright 2017 Kindly Ops LLC.
 # Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You
@@ -16,7 +17,7 @@
 ROOT=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
 cd "${ROOT}"
 
-# Builds the ecr-login binary from source in the specified destination paths.
+# Builds the ssm-login binary from source in the specified destination paths.
 mkdir -p $1
 
 # TODO!!!
