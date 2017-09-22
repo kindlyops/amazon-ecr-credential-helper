@@ -44,7 +44,7 @@ func GetCredentials(serverURL string) (*Auth, error) {
 	respUser, errUser := svc.GetParameter(pramsUser)
 	respPass, errPass := svc.GetParameter(pramsPass)
 	if errUser != nil || errPass != nil {
-		return nil, string(errUser)+string(errPass)
+		return nil, nil
 	}
 
 	log.Debugf("Retrieving credentials for (%s)", serverURL)
