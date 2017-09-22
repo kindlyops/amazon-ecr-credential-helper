@@ -14,9 +14,9 @@
 package main
 
 import (
-	ecr "github.com/awslabs/amazon-ecr-credential-helper/ecr-login"
-	"ssm-login/api"
-	"github.com/awslabs/amazon-ecr-credential-helper/ecr-login/config"
+	ecr "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/config"
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
 )

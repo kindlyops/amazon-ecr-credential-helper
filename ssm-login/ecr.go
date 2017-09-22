@@ -16,7 +16,7 @@ package ecr
 import (
 	"errors"
 	"fmt"
-	"ssm-login/api"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
 )
