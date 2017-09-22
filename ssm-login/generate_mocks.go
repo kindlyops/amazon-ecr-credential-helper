@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops, LLC.
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -11,6 +12,6 @@
 // express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package ecr
+package ssm
 
-//go:generate mockgen.sh github.com/awslabs/amazon-ecr-credential-helper/ecr-login/api ClientFactory,Client mocks/ecr_mocks.go
+//go:generate mockgen.sh github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api ClientFactory,Client mocks/ssm_mocks.go
