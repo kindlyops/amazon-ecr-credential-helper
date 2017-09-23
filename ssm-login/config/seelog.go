@@ -39,7 +39,7 @@ func loggerConfig() string {
 	logfile, err := homedir.Expand(GetCacheDir() + "/log/ssm-login.log")
 	if err != nil {
 		fmt.Errorf("%v", err)
-		logfile = "/tmp/.ecr/log/ssm-login.log"
+		logfile = "/tmp/.ssm/log/ssm-login.log"
 	}
 	// Clean the path to replace with OS-specific separators
 	logfile = filepath.Clean(logfile)

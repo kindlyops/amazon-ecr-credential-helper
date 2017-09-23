@@ -17,7 +17,7 @@ package api
 import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/service/ecr"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
 )
 
@@ -67,7 +67,7 @@ func (defaultClientFactory DefaultClientFactory) NewClient(awsSession *session.S
 // NewClientWithOptions Create new client with Options
 func (defaultClientFactory DefaultClientFactory) NewClientWithOptions(opts Options) Client {
 	return &defaultClient{
-		ecrClient:       ecr.New(opts.Session, opts.Config),
+		ecrClient:       ssm.New(opts.Session, opts.Config),
 		credentialCache: cache.BuildCredentialsCache(opts.Session, aws.StringValue(opts.Config.Region), opts.CacheDir),
 	}
 }

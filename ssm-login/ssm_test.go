@@ -19,10 +19,10 @@ import (
 	"fmt"
 	"testing"
 
-	ssm "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
-	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/mocks"
 	"github.com/docker/docker-credential-helpers/credentials"
 	"github.com/golang/mock/gomock"
+	ssm "github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -45,7 +45,7 @@ func TestGetSuccess(t *testing.T) {
 	}
 
 	factory.EXPECT().NewClientFromRegion(region).Return(client)
-	client.EXPECT().GetCredentials(proxyEndpoint).Return(&ecr.Auth{
+	client.EXPECT().GetCredentials(proxyEndpoint).Return(&ssm.Auth{
 		Username:      expectedUsername,
 		Password:      expectedPassword,
 		ProxyEndpoint: proxyEndpointUrl,
@@ -96,7 +96,7 @@ func TestListSuccess(t *testing.T) {
 	}
 
 	factory.EXPECT().NewClientWithDefaults().Return(client)
-	client.EXPECT().ListCredentials().Return([]*ecr.Auth{
+	client.EXPECT().ListCredentials().Return([]*ssm.Auth{
 		&ecr.Auth{
 			Username:      expectedUsername,
 			Password:      expectedPassword,
