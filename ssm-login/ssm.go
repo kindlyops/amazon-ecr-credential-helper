@@ -17,9 +17,10 @@ package ssm
 import (
 	"errors"
 	"fmt"
-	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
+
 	log "github.com/cihub/seelog"
 	"github.com/docker/docker-credential-helpers/credentials"
+	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/api"
 )
 
 var notImplemented = errors.New("not implemented")
@@ -44,7 +45,7 @@ func (SSMHelper) Delete(serverURL string) error {
 func (self SSMHelper) Get(serverURL string) (string, string, error) {
 	defer log.Flush()
 
-	client := self.ClientFactory.NewClientFromRegion(registry.Region)
+	client := self.ClientFactory.NewClientWithDefaults()
 	auth, err := client.GetCredentials(serverURL)
 	if err != nil {
 		log.Errorf("Error retrieving credentials: %v", err)
@@ -57,7 +58,8 @@ func (self SSMHelper) List() (map[string]string, error) {
 	log.Debug("Listing credentials")
 	client := self.ClientFactory.NewClientWithDefaults()
 
-	auths, err := client.ListCredentials()
+	/*auths*/
+	_, err := client.ListCredentials()
 	if err != nil {
 		log.Errorf("Error listing credentials: %v", err)
 		return nil, fmt.Errorf("Could not list credentials: %v:", err)
@@ -65,9 +67,10 @@ func (self SSMHelper) List() (map[string]string, error) {
 
 	result := map[string]string{}
 
-	for _, auth := range auths {
-	        serverURL := auth.ProxyEndpoint
-	        result[serverURL] = auth.Username
-	}
+	//for _, auth := range auths {
+	// TODO: figure out what makes sense here
+	//serverURL := auth.ProxyEndpoint
+	//result[serverURL] = auth.Username
+	//}
 	return result, nil
 }

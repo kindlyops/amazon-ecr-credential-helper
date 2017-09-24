@@ -39,7 +39,7 @@ type defaultClient struct {
 }
 
 // GetCredentials returns username, password, and proxyEndpoint
-func GetCredentials(serverURL string) (*Auth, error) {
+func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 	sess := session.Must(session.NewSession())
 	svc := ssm.New(sess)
 	pramsUser := &ssm.GetParameterInput{
@@ -62,4 +62,9 @@ func GetCredentials(serverURL string) (*Auth, error) {
 		Username: *respUser.Parameter.Value,
 		Password: *respPass.Parameter.Value,
 	}, nil
+}
+
+func (dc defaultClient) ListCredentials() ([]*Auth, error) {
+	// TODO: what does this need?
+	return nil, nil
 }
