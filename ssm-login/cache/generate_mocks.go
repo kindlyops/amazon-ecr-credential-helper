@@ -1,3 +1,4 @@
+// Copyright 2017 Kindly Ops, LLC
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may
@@ -13,4 +14,4 @@
 
 package cache
 
-//go:generate mockgen.sh github.com/awslabs/amazon-ecr-credential-helper/ecr-login/cache CredentialsCache mocks/cache_mocks.go
+//go:generate mockgen.sh github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache CredentialsCache mocks/cache_mocks.go
