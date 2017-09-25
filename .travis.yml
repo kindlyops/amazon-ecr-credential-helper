@@ -4,10 +4,6 @@ os:
 - linux
 - osx
 go:
-- 1.5.x
-- 1.6.x
-- 1.7.x
-- 1.8.x
 - 1.9
 go_import_path: github.com/kindlyops/amazon-ssm-credential-helper
 install: make get-deps
