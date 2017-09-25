@@ -40,6 +40,7 @@ type defaultClient struct {
 
 // GetCredentials returns username, password, and proxyEndpoint
 func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
+	log.Debugf("Retrieving credentials for (%s)", serverURL)
 	sess := session.Must(session.NewSession())
 	svc := ssm.New(sess)
 	pramsUser := &ssm.GetParameterInput{
@@ -51,17 +52,19 @@ func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 		WithDecryption: aws.Bool(true),
 	}
 	respUser, errUser := svc.GetParameter(pramsUser)
-	respPass, errPass := svc.GetParameter(pramsPass)
-	if errUser != nil || errPass != nil {
+	if errUser != nil {
+		log.Debug("Error when calling svc.GetParameter for user", errUser)
 		return nil, nil
 	}
-
-	log.Debugf("Retrieving credentials for (%s)", serverURL)
-
-	return &Auth{
-		Username: *respUser.Parameter.Value,
-		Password: *respPass.Parameter.Value,
-	}, nil
+	respPass, errPass := svc.GetParameter(pramsPass)
+	if errPass != nil {
+		log.Debug("Error when calling svc.GetParameter for password", errPass)
+		return nil, nil
+	}
+	var result = new(Auth)
+	result.Username = *respUser.Parameter.Value
+	result.Password = *respPass.Parameter.Value
+	return result, nil
 }
 
 func (dc defaultClient) ListCredentials() ([]*Auth, error) {
