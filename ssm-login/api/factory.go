@@ -16,6 +16,7 @@ package api
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
@@ -38,8 +39,13 @@ type DefaultClientFactory struct{}
 
 // NewClientWithDefaults creates the client and defaults region
 func (defaultClientFactory DefaultClientFactory) NewClientWithDefaults() Client {
-	awsSession := session.New()
-	awsConfig := awsSession.Config
+	awsSession := session.Must(session.NewSession())
+	metadata := ec2metadata.New(awsSession)
+	region, err := metadata.Region()
+	if err != nil {
+		region = "us-east-1"
+	}
+	awsConfig := &aws.Config{Region: &region}
 	return defaultClientFactory.NewClientWithOptions(Options{
 		Session: awsSession,
 		Config:  awsConfig,
@@ -67,7 +73,7 @@ func (defaultClientFactory DefaultClientFactory) NewClient(awsSession *session.S
 // NewClientWithOptions Create new client with Options
 func (defaultClientFactory DefaultClientFactory) NewClientWithOptions(opts Options) Client {
 	return &defaultClient{
-		ecrClient:       ssm.New(opts.Session, opts.Config),
+		ssmClient:       ssm.New(opts.Session, opts.Config),
 		credentialCache: cache.BuildCredentialsCache(opts.Session, aws.StringValue(opts.Config.Region), opts.CacheDir),
 	}
 }

@@ -40,15 +40,14 @@ func TestGetSuccess(t *testing.T) {
 	factory := mock_api.NewMockClientFactory(ctrl)
 	client := mock_api.NewMockClient(ctrl)
 
-	helper := &ECRHelper{
+	helper := &SSMHelper{
 		ClientFactory: factory,
 	}
 
-	factory.EXPECT().NewClientFromRegion(region).Return(client)
+	factory.EXPECT().NewClientWithDefaults().Return(client)
 	client.EXPECT().GetCredentials(proxyEndpoint).Return(&ssm.Auth{
-		Username:      expectedUsername,
-		Password:      expectedPassword,
-		ProxyEndpoint: proxyEndpointUrl,
+		Username: expectedUsername,
+		Password: expectedPassword,
 	}, nil)
 
 	username, password, err := helper.Get(proxyEndpoint)
@@ -63,11 +62,11 @@ func TestGetError(t *testing.T) {
 	factory := mock_api.NewMockClientFactory(ctrl)
 	client := mock_api.NewMockClient(ctrl)
 
-	helper := &ECRHelper{
+	helper := &SSMHelper{
 		ClientFactory: factory,
 	}
 
-	factory.EXPECT().NewClientFromRegion(region).Return(client)
+	factory.EXPECT().NewClientWithDefaults().Return(client)
 	client.EXPECT().GetCredentials(proxyEndpoint).Return(nil, errors.New("test error"))
 
 	username, password, err := helper.Get(proxyEndpoint)
@@ -77,7 +76,7 @@ func TestGetError(t *testing.T) {
 }
 
 func TestGetNoMatch(t *testing.T) {
-	helper := &ECRHelper{}
+	helper := &SSMHelper{}
 
 	username, password, err := helper.Get("not-ssm-server-url")
 	assert.True(t, credentials.IsErrCredentialsNotFound(err))
@@ -91,16 +90,15 @@ func TestListSuccess(t *testing.T) {
 	factory := mock_api.NewMockClientFactory(ctrl)
 	client := mock_api.NewMockClient(ctrl)
 
-	helper := &ECRHelper{
+	helper := &SSMHelper{
 		ClientFactory: factory,
 	}
 
 	factory.EXPECT().NewClientWithDefaults().Return(client)
 	client.EXPECT().ListCredentials().Return([]*ssm.Auth{
-		&ecr.Auth{
-			Username:      expectedUsername,
-			Password:      expectedPassword,
-			ProxyEndpoint: proxyEndpointUrl,
+		&ssm.Auth{
+			Username: expectedUsername,
+			Password: expectedPassword,
 		},
 	}, nil)
 
@@ -116,7 +114,7 @@ func TestListFailure(t *testing.T) {
 	factory := mock_api.NewMockClientFactory(ctrl)
 	client := mock_api.NewMockClient(ctrl)
 
-	helper := &ECRHelper{
+	helper := &SSMHelper{
 		ClientFactory: factory,
 	}
 

@@ -16,9 +16,7 @@ package api
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 	log "github.com/cihub/seelog"
 	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
 )
@@ -34,14 +32,13 @@ type Auth struct {
 }
 
 type defaultClient struct {
-	ecrClient       ssmiface.SSMAPI
+	ssmClient       *ssm.SSM
 	credentialCache cache.CredentialsCache
 }
 
 // GetCredentials returns username, password, and proxyEndpoint
-func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
-	sess := session.Must(session.NewSession())
-	svc := ssm.New(sess)
+func (client defaultClient) GetCredentials(serverURL string) (*Auth, error) {
+	log.Debugf("Retrieving credentials for (%s)", serverURL)
 	pramsUser := &ssm.GetParameterInput{
 		Name:           aws.String(serverURL + "-usr"),
 		WithDecryption: aws.Bool(true),
@@ -50,18 +47,20 @@ func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 		Name:           aws.String(serverURL + "-pwd"),
 		WithDecryption: aws.Bool(true),
 	}
-	respUser, errUser := svc.GetParameter(pramsUser)
-	respPass, errPass := svc.GetParameter(pramsPass)
-	if errUser != nil || errPass != nil {
-		return nil, nil
+	respUser, errUser := client.ssmClient.GetParameter(pramsUser)
+	if errUser != nil {
+		log.Debug("Error when calling svc.GetParameter for user", errUser)
+		return nil, errUser
 	}
-
-	log.Debugf("Retrieving credentials for (%s)", serverURL)
-
-	return &Auth{
-		Username: *respUser.Parameter.Value,
-		Password: *respPass.Parameter.Value,
-	}, nil
+	respPass, errPass := client.ssmClient.GetParameter(pramsPass)
+	if errPass != nil {
+		log.Debug("Error when calling svc.GetParameter for password", errPass)
+		return nil, errUser
+	}
+	var result = new(Auth)
+	result.Username = *respUser.Parameter.Value
+	result.Password = *respPass.Parameter.Value
+	return result, nil
 }
 
 func (dc defaultClient) ListCredentials() ([]*Auth, error) {

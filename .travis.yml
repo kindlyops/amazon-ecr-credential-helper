@@ -1,15 +1,14 @@
 language: go
 sudo: false
 os:
-    - linux
-    - osx
+- linux
+- osx
 go:
-    - 1.5.x
-    - 1.6.x
-    - 1.7.x
-    - 1.8.x
-    - 1.9
+- 1.9
 go_import_path: github.com/kindlyops/amazon-ssm-credential-helper
 install: make get-deps
 script:
-    - make test
+- make test
+env:
+  global:
+    secure: LGWWxZjKosbsugCyqpVuA5E+7pAROBmvfNFf2yRi8lDJ4LEWJK/sik/TTapb3w1+M5ZT0cSM3nFt6M1TjyEkYdNSQl0Sb7gOFWEEQfp3nECLKJfVxmoi0f5DUrd48suRJG4bLpCwjP59U3lpM01hqn/Va2HOMb2aJ1QeJH9DxyCs+Fqcs9lTuAvC7SXRkOP9EGBLh2kUTYukipAZ+c+6KX3br9woZ8Zy3MQIaTCBDmRNj5f4B+JDMeMT+7m0KYAZzRv8FlNqN0t+owHtXKhvHeYRxrGwPem+lBWv7gj7VjWCXhAvJ1m7Corek97mL/aM+Ym0gBK8pY2xbd1sv4+9ORTnw4qfN939T6A9VyW3TP45JhoZKeFBS3Qak3Erws63MOn8UTuUJNhSnns29G8z+Y1BJgdt7ga3c0IA5YqmzixeM6BYl4x21I0qurOY4OX0zb0xdYLZZBy3Emi8D2/3titKf9LnnK/xtlSg2HkNBaAvOAan06XSzhZt0ejfAceXPrh3JebWTPeosvNCWI0trow5oP/uY9BKVCaT+fDX95c5EHLlOYyYm9Pq3nqH4y57sgfsUS2XU3+81jCIRgTk8wKhoM2iiP+uWIrNf9fsMQ0HRelutsjJKpDVcj8Sgi8QLjQhjeNNpI+6t4wNHSR3kSvlC1gG+eJkXE3zLXA7PII=
