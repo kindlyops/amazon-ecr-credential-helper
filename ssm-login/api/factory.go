@@ -16,6 +16,7 @@ package api
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
@@ -39,7 +40,12 @@ type DefaultClientFactory struct{}
 // NewClientWithDefaults creates the client and defaults region
 func (defaultClientFactory DefaultClientFactory) NewClientWithDefaults() Client {
 	awsSession := session.New()
-	awsConfig := awsSession.Config
+	metadata  := ec2metadata.New(nil)
+	region, err := metadata.Region()
+	if err != nil {
+		region = "us-east-1"
+	}
+	awsConfig := &aws.Config{Region: &region}
 	return defaultClientFactory.NewClientWithOptions(Options{
 		Session: awsSession,
 		Config:  awsConfig,
