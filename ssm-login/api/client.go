@@ -54,12 +54,12 @@ func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 	respUser, errUser := svc.GetParameter(pramsUser)
 	if errUser != nil {
 		log.Debug("Error when calling svc.GetParameter for user", errUser)
-		return nil, nil
+		return nil, errUser
 	}
 	respPass, errPass := svc.GetParameter(pramsPass)
 	if errPass != nil {
 		log.Debug("Error when calling svc.GetParameter for password", errPass)
-		return nil, nil
+		return nil, errUser
 	}
 	var result = new(Auth)
 	result.Username = *respUser.Parameter.Value
