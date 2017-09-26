@@ -16,9 +16,7 @@ package api
 
 import (
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
-	"github.com/aws/aws-sdk-go/service/ssm/ssmiface"
 	log "github.com/cihub/seelog"
 	"github.com/kindlyops/amazon-ssm-credential-helper/ssm-login/cache"
 )
@@ -34,15 +32,13 @@ type Auth struct {
 }
 
 type defaultClient struct {
-	ecrClient       ssmiface.SSMAPI
+	ssmClient       *ssm.SSM
 	credentialCache cache.CredentialsCache
 }
 
 // GetCredentials returns username, password, and proxyEndpoint
-func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
+func (client defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 	log.Debugf("Retrieving credentials for (%s)", serverURL)
-	sess := session.Must(session.NewSession())
-	svc := ssm.New(sess)
 	pramsUser := &ssm.GetParameterInput{
 		Name:           aws.String(serverURL + "-usr"),
 		WithDecryption: aws.Bool(true),
@@ -51,12 +47,12 @@ func (dc defaultClient) GetCredentials(serverURL string) (*Auth, error) {
 		Name:           aws.String(serverURL + "-pwd"),
 		WithDecryption: aws.Bool(true),
 	}
-	respUser, errUser := svc.GetParameter(pramsUser)
+	respUser, errUser := client.ssmClient.GetParameter(pramsUser)
 	if errUser != nil {
 		log.Debug("Error when calling svc.GetParameter for user", errUser)
 		return nil, errUser
 	}
-	respPass, errPass := svc.GetParameter(pramsPass)
+	respPass, errPass := client.ssmClient.GetParameter(pramsPass)
 	if errPass != nil {
 		log.Debug("Error when calling svc.GetParameter for password", errPass)
 		return nil, errUser

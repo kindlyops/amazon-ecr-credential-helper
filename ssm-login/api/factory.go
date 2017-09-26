@@ -39,8 +39,8 @@ type DefaultClientFactory struct{}
 
 // NewClientWithDefaults creates the client and defaults region
 func (defaultClientFactory DefaultClientFactory) NewClientWithDefaults() Client {
-	awsSession := session.New()
-	metadata  := ec2metadata.New(nil)
+	awsSession := session.Must(session.NewSession())
+	metadata := ec2metadata.New(awsSession)
 	region, err := metadata.Region()
 	if err != nil {
 		region = "us-east-1"
@@ -73,7 +73,7 @@ func (defaultClientFactory DefaultClientFactory) NewClient(awsSession *session.S
 // NewClientWithOptions Create new client with Options
 func (defaultClientFactory DefaultClientFactory) NewClientWithOptions(opts Options) Client {
 	return &defaultClient{
-		ecrClient:       ssm.New(opts.Session, opts.Config),
+		ssmClient:       ssm.New(opts.Session, opts.Config),
 		credentialCache: cache.BuildCredentialsCache(opts.Session, aws.StringValue(opts.Config.Region), opts.CacheDir),
 	}
 }
